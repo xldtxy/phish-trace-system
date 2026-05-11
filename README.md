@@ -44,15 +44,15 @@
  
  
 🛠️ 技术栈
-类别 技术选型 版本 
--后端框架 Flask 2.3.3 
--跨域处理 Flask-Cors 4.0.0 
--大模型运行平台 Ollama 0.1.30 
--大模型 Qwen2:7b-instruct / Qwen2-VL:7b-instruct 最新 
--前端 HTML5 + Tailwind CSS + 原生JavaScript - 
--邮件解析 email + BeautifulSoup4 4.12.2 
--二维码识别 pyzbar + Pillow 0.1.9 / 10.1.0 
--第三方API IP-API、阿里云WHOIS、Virustotal、12321 - 
+  类别 技术选型 版本 
+- 后端框架 Flask 2.3.3 
+- 跨域处理 Flask-Cors 4.0.0 
+- 大模型运行平台 Ollama 0.1.30 
+- 大模型 Qwen2:7b-instruct / Qwen2-VL:7b-instruct 最新 
+- 前端 HTML5 + Tailwind CSS + 原生JavaScript - 
+- 邮件解析 email + BeautifulSoup4 4.12.2 
+- 二维码识别 pyzbar + Pillow 0.1.9 / 10.1.0 
+- 第三方API IP-API、阿里云WHOIS、Virustotal、12321 - 
  
  
  
