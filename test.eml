@@ -1,0 +1,124 @@
+Received: from a115-196.smtp-out.us-east-2.amazonses.com (a115-196.smtp-out.us-east-2.amazonses.com [54.240.115.196])
+	by newxmmxszc35-0.qq.com (NewMX) with SMTP id 8082DE45
+	for <3038315580@qq.com>; Fri, 01 May 2026 14:32:08 +0800
+X-QQ-mid: xmmxzc35-0t1777617194tvc6l5ujz
+Sender: 010f019de23dce78-0b1c931b-dd2c-4b19-9f88-33e42faf33d6-000000@us-east-2.amazonses.com
+X-QQ-CSender: 010f019de23dce78-0b1c931b-dd2c-4b19-9f88-33e42faf33d6-000000@us-east-2.amazonses.com
+X-QQ-XMAILINFO: NQpUKHQ/Y/CEHh5iFHE8uclpB0K969wZfTCOwfEOnGjJFjz3Lp4ii2FC/0+BxY
+	 HSysi/BjQ4mdP5UhV0eiUuJeY+VkviKcBVh4LuFyy4B8lKZG4vHU4TPvIUzdDaBXX++NIf8b66fB
+	 jIX8DqpkZeqmxMXFB/v4KsYWyTTRc/DfRSQha9GRdAlLHFJlgq0PhSzqnLrsmCr1DlFYcGfked+r
+	 TB51g3oBQAlV7osqN6c54oKE9577rY5StyTDNWv7ep8IHUNstZ8fLSekV2Nsbgqw8vWSZhA443GW
+	 vvo9Nr+egVpsDXQCrIvSbRevKaSelT37ucyZsGfr2SX0zqhBXE4pCBRU7t6XH0fi0OzAgu8hMgY4
+	 kGk+2iUZOV1Pacu49G/0ZVZyI2no5oe8sG3ZQ+ji4k4B6wh50j6OXyp4GJafRoMWxXJOVPi2XqLV
+	 78TPEHtwcmtDYlIQBtmr1pOjwhQfMKoFL3hcWnZ3m8aY2sWLLQM/hyWxcdTFZ2Tx4y6JsDsXFiNq
+	 KRIqOvfXv3e6DH9p9SqY5jFhiXTf9iFfCoHAUEQA4IbIzW6l2bB5hYrK97tsuMmRD1g890aW8SsB
+	 pTF/ltuIYdlAxmhrDha9y5zd+MNHkXzSpOzM2+DfupHpdINZG5N0JjoWEWMRH4Btge61yoSjKwZz
+	 30JxAHElEaNGXO/XXIzsMQ3JqWvnoe/oJc7DOXDN9POlrH5g8Q8Qd05OCCLwOjdVQlaxB1cqKkgM
+	 uXcsd2j8XOFDA2Z98NpUVwZtfgE0rdO664zLjxTxjjnKlMXjXdCMDrrqR1K0fbfbXvNShkSMegeU
+	 gmFHt2Ueg9O5nrOrJajVDv5sFrgUBuqrLrp/BTHFSLTjGnm0cbF8Zskli77woz/gKXXnHkrdJhFc
+	 jOy2x63CRuoz3cx2pZqcYTyhjur+SYQJDJfnnsxbmdTS78CtEl7xTzZ9D7IjBgD74qyIlH+Mh269
+	 mdYSTN3yd12vQm6LQWqJBEwX194M783xTRdpOBnnHSD5crWChz0+Gxc72JnDRto4bfrovbu45A/s
+	 CUyik7jNdZRFjDhgkF2QE6uZJ2z6rcnvGjPgtt6UmYvBAG3LeGKblW2zjchHGYBWja0TZik2mNF5
+	 6zwtxu35MdqVdzSzJ9xMNzVYZvuiq/5MLnbF+60WvaQeTdMlpoEoyONtZkdga1Kbh6iQC02FGmWG
+	 VQsCEmA/E4/+Astlnzy7sWkiqwbCKCH0dWimw9AsODCRrK0Hq5+vAKzo1C88NGTs0BnvDR9MO6ql
+	 T9kFW2+WFF6WATmaEG2SLcMEUmmSk0RVZ9pmB1k7o4dYSM3N08ZRjb21hEq0xhGAZnPa+Fnt+sfQ
+	 zbkFPTwE/LbOnsL73wGX2vQHIPC62C6/hQU6tBBHiSVec=
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+Authentication-Results: mx.qq.com; spf=pass(54.240.115.196) smtp.mailfrom=<010
+	 f019de23dce78-0b1c931b-dd2c-4b19-9f88-33e42faf33d6-000000@us-east-2.amazonse
+	 s.com>; dkim=pass(signature was verified) header.d=freecodecamp.org; dmarc=p
+	 ass(p=QUARANTINE sp=REJECT pct=100) header.from=freecodecamp.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=xtvzsasjxsje2d2eg3zirbmf5yz34y3f; d=freecodecamp.org;
+	t=1777617194;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+	bh=u3r1zK4/bU2jDZbph2SkoeSRXFM5TltN+JCR/681iy4=;
+	b=YmqpIgQP9usyr3Oz+bk1jf3vTT3Rd5BJ5pfyY7caHUJ5JZe6qbQE3vlqrbDlelcK
+	g3wAcnO23e9RGkpvTtnwYPUfVoB3/0N1RUrw1j+lMWdnzZFrx2zXL/zJt1f6GWcPeky
+	qiswKifYWaaU3hrfiUptFNKFqXVWjl7qWSJgVfMupM+oNL+jvk6kpo+SPWabKS6ApsF
+	B9zHbZx55NTByxe7/mqDlV9JHOqmKsF9iMNj7/2i0NH0IdhG8Wu6IJMURbWU2ZptUHF
+	YAZryftZ8Y1rqvdtyrAGac0g1GOsZ73RxrbjD8/ytU128LtAfyPWM4h2oT+YpEpjH18
+	5vJjDbt89w==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=ndjes4mrtuzus6qxu3frw3ubo3gpjndv; d=amazonses.com; t=1777617194;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+	bh=u3r1zK4/bU2jDZbph2SkoeSRXFM5TltN+JCR/681iy4=;
+	b=vhD7x/iBk8PCyBbQUp1FQdeHQYt2HCIKuzLNTuv8VIYFnFKEApEA1J2bK0XPKHjq
+	kNONdqh2tG7LMHwqNTtxQyz1WUqkTLMG/F1XW9A5mzAzE2MlKxmIBVHHvPnBTom8+RX
+	m0p3v/9ePzon2ZC5Cx0vURpV/40KlU8IzNrOETpg=
+From: Quincy Larson <quincy@freecodecamp.org>
+To: 3038315580@qq.com
+Subject: Learn IT fundamentals [FREE 13-hour course on hardware, networking,
+ security, databases, and Linux]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <010f019de23dce78-0b1c931b-dd2c-4b19-9f88-33e42faf33d6-000000@us-east-2.amazonses.com>
+Date: Fri, 1 May 2026 06:33:14 +0000
+Feedback-ID: ::1.us-east-2.1hDOIBmCg4sVkd/C4kNDG1+wLyFqQW9X4Rn89gF2+7s=:AmazonSES
+X-SES-Outgoing: 2026.05.01-54.240.115.196
+
+Here are this week's five freeCodeCamp resources that are worth your time:
+
+1. freeCodeCamp just published a comprehensive course that will teach you I=
+nformation Technology fundamentals. You'll learn about hardware, networking=
+, security, databases, DNS, Cloud, Git, and even some Linux basics. This is=
+ a good starting point for a career in IT, systems administration, network =
+engineering, and it doesn't hurt for developers in general to understand th=
+ese concepts. Dig in. (13 hour YouTube course): https://www.freecodecamp.or=
+g/news/learn-hardware-cloud-devops-networking-security-databases-dns-git-an=
+d-linux/
+
+2. I filmed a new full-length documentary! Stanford invited me to cover the=
+ir hackathon, TreeHacks 2026. In total, 15,000 students from around the wor=
+ld applied. Of these only 1,000 were admitted. These elite few competed for=
+ more than 500k in prizes. I filmed all 3 days of the event and interviewed=
+ more than 100 devs. You'll see robot boxing, llamas, and tons of project d=
+emos. One dev got attacked out of nowhere by a bipedal robot right in the m=
+iddle of my interview. You can watch the documentary in full right now. (10=
+0 minute documentary): https://www.freecodecamp.org/news/inside-stanford-el=
+ite-student-hackathon-full-documentary
+
+3. freeCodeCamp also just published a course on 3D web development with Ble=
+nder and Three.js. You'll build an interactive "cozy cafe" portfolio from s=
+cratch while learning how 3D art and web development fit together. The cour=
+se covers subdivision modeling, texture painting, lighting, and performance=
+ optimization. You'll make your scene interactive so people can click aroun=
+d and explore it. By the end of the course, you'll have built two complete =
+3D scenes and learned how to deploy them to the web. (5 hour YouTube course=
+): https://www.freecodecamp.org/news/3d-web-development-with-blender-and-th=
+ree-js/
+
+4. Learn how to dockerize your own Go project. First this beginner-friendly=
+ tutorial explains containerization in plain English. Then it walks you thr=
+ough building a Dockerfile for a Go app. You'll learn about images, contain=
+ers, volumes, and Docker Compose. If Docker still feels a bit abstract to y=
+ou, code along at home and you'll feel the concrete start to set. (25 minut=
+e read): https://www.freecodecamp.org/news/how-to-dockerize-a-go-applicatio=
+n-full-step-by-step-walkthrough/
+
+5. Learn how to use Toyota's =E2=80=9C5 Whys=E2=80=9D technique to get past=
+ surface-level fixes and diagnose the real cause of a problem. This tutoria=
+l shows how you can move from symptoms to system-level causes by repeatedly=
+ asking why, then checking each answer against your evidence. (20 minute re=
+ad): https://www.freecodecamp.org/news/from-symptoms-to-root-cause-how-to-u=
+se-the-5-whys-technique/
+
+Shout out to Stanford for covering all of my costs for filming the document=
+ary. But for all the other work freeCodeCamp does, we rely on support from =
+the community. Please consider joining the 10,089 kind folks who donate eac=
+h month to support our charity's mission: https://www.freecodecamp.org/dona=
+te
+
+Quote of the Week:=20
+=E2=80=9CA computer once beat me at chess. But it was no match for me at ki=
+ckboxing.=E2=80=9D =E2=80=94 Emo Philips
+
+Until next week, happy coding.
+
+-- Quincy Larson
+
+Teacher and founder of freeCodeCamp.org
+
+If these aren't worth your time, you can turn them off: https://www.freecod=
+ecamp.org/ue/7GCOBjv2d3qgQc0SdaMM1
