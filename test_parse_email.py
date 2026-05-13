@@ -2,7 +2,7 @@ from modules.preprocess import parse_email
 
 
 def test_email_parser():
-    # 👉 把这里改成你自己的.eml文件路径
+    # 把这里改成你自己的.eml文件路径
     test_eml_path = "test.eml"
 
     print("=" * 50)
@@ -15,7 +15,7 @@ def test_email_parser():
         result = parse_email(test_eml_path)
 
         # 打印核心解析结果
-        print("\n✅ 邮件解析成功！")
+        print("\n邮件解析成功！")
         print("-" * 50)
         print(f"发件人：{result['headers']['from']}")
         print(f"收件人：{result['headers']['to']}")
@@ -40,7 +40,7 @@ def test_email_parser():
         print("测试完成！邮件解析功能正常。")
 
     except Exception as e:
-        print("\n❌ 邮件解析失败！")
+        print("\n邮件解析失败！")
         print(f"错误信息：{str(e)}")
         print("=" * 50)
 
