@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>钓鱼邮件溯源与反制系统</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    <!-- 替换为国内静态资源CDN，解决境外无法访问问题 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         body { background: #f4f6f9; }
         .main-box { margin-top: 50px; }
@@ -23,11 +24,11 @@
     <h2 class="text-center">基于大模型的钓鱼邮件智能溯源与反制系统</h2>
     <hr>
 
-    <!-- 导航按钮 -->
+    <!-- 导航按钮：修正为Flask路由路径 -->
     <div class="card text-center">
-        <a href="upload.html" class="btn btn-primary btn-lg">邮件上传检测</a>
+        <a href="/upload" class="btn btn-primary btn-lg">邮件上传检测</a>
         &nbsp;&nbsp;
-        <a href="result.html" class="btn btn-default btn-lg">溯源与反制查看</a>
+        <a href="/result" class="btn btn-default btn-lg">溯源与反制查看</a>
     </div>
 
     <!-- 统计面板 -->

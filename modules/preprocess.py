@@ -86,3 +86,7 @@ def parse_email(file_path):
 
     except Exception as e:
         raise Exception(f"邮件解析失败: {str(e)}")
+
+
+# 兼容旧版函数名
+parse_email_simple = parse_email

@@ -1,0 +1,14 @@
+From: "支付宝安全中心" <security@alipay-verification.com>
+To: user@qq.com
+Subject: 【重要通知】您的账户存在交易风险，请立即核验
+Date: Wed, 17 Jun 2026 16:00:00 +0800
+Received: from alipay-verification.com (unknown [103.45.67.89])
+
+尊敬的用户：
+
+系统检测到您的支付宝账户近期存在异常异地登录，
+为保障您的资金安全，请在24小时内点击下方链接完成身份核验：
+http://fake-alipay-security.com/verify?uid=1234567
+
+逾期未核验将自动冻结账户支付功能。
+支付宝安全中心
