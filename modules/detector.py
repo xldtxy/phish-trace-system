@@ -1,12 +1,8 @@
 import requests
 import json
+import hashlib
+import config
 
-# ========== 配置项 - 请修改这里 ==========
-DASHSCOPE_API_KEY = "sk-bc468f740d0d40c4b421e68ca996d707"  # 替换成你自己的DashScope密钥
-MODEL_NAME = "qwen-turbo"                    # 可选: qwen-turbo / qwen-plus / qwen-max
-REQUEST_TIMEOUT = 60                         # 请求超时时间（秒）
-
-# 钓鱼敏感关键词（兜底规则用）
 SUSPICIOUS_KEYWORDS = [
     "login", "signin", "verify", "account", "password", "bank",
     "验证", "登录", "账户", "密码", "冻结", "解封", "补贴", "工资",
@@ -15,17 +11,13 @@ SUSPICIOUS_KEYWORDS = [
 
 
 def _rule_based_detect(email_data):
-    """
-    兜底：规则-based 简易检测
-    当大模型API调用失败时自动降级，保证系统不崩溃
-    """
+    """规则兜底检测"""
     is_phish = False
     risk_level = "低"
     confidence = 0.5
     reason = "规则初筛：未检测到明显钓鱼特征"
     malicious_links = []
 
-    # 检查链接中的敏感关键词
     for link in email_data.get("links", []):
         link_lower = link.lower()
         for kw in SUSPICIOUS_KEYWORDS:
@@ -39,7 +31,6 @@ def _rule_based_detect(email_data):
         if is_phish:
             break
 
-    # 检查正文紧急诱导话术
     text = email_data.get("text", "")
     urgency_words = ["立即", "紧急", "24小时", "尽快", "否则"]
     for word in urgency_words:
@@ -58,95 +49,121 @@ def _rule_based_detect(email_data):
     }
 
 
+def _virustotal_check(links):
+    """VirusTotal链接威胁情报检测"""
+    if not config.VIRUSTOTAL_API_KEY or not links:
+        return [], 0
+
+    malicious = []
+    total_malicious = 0
+    headers = {"x-apikey": config.VIRUSTOTAL_API_KEY}
+
+    for link in links[:5]:  # 限制检测数量，避免超限
+        try:
+            # 提交URL扫描
+            res = requests.post(
+                "https://www.virustotal.com/api/v3/urls",
+                headers=headers,
+                data={"url": link},
+                timeout=10
+            )
+            if res.status_code != 200:
+                continue
+
+            # 获取分析ID
+            analysis_id = res.json()["data"]["id"]
+
+            # 查询结果
+            res_report = requests.get(
+                f"https://www.virustotal.com/api/v3/analyses/{analysis_id}",
+                headers=headers,
+                timeout=10
+            )
+            stats = res_report.json()["data"]["attributes"]["stats"]
+            if stats["malicious"] > 0:
+                malicious.append(link)
+                total_malicious += stats["malicious"]
+        except:
+            continue
+
+    return malicious, total_malicious
+
+
 def detect_phish(email_data):
-    """
-    核心函数：钓鱼邮件智能检测（通义千问在线API版）
-    输入：后端解析后的结构化邮件数据 email_data
-    输出：标准化检测结果（严格对齐后端接口）
-    """
-    # 提取邮件核心信息
+    """核心：三重引擎钓鱼邮件检测"""
     sender = email_data.get("from", "未知发件人")
     subject = email_data.get("subject", "无主题")
     body = email_data.get("text", "")
     links = email_data.get("links", [])
 
-    # 正文过长截断，避免token超限
     if len(body) > 3000:
         body = body[:3000] + "\n[内容过长已截断]"
 
-    # 构造对话消息
+    # 先执行威胁情报检测
+    vt_malicious, vt_count = _virustotal_check(links)
+
     messages = [
         {
             "role": "system",
-            "content": "你是专业的钓鱼邮件安全分析师，擅长识别伪造发件人、诱导链接、诈骗话术等钓鱼邮件特征。你必须严格按照指定的JSON格式返回结果，不得输出任何多余文字。"
+            "content": "你是专业的钓鱼邮件安全分析师，结合威胁情报结果综合判断。必须严格返回JSON，禁止输出多余文字。"
         },
         {
             "role": "user",
             "content": f"""
-请分析以下邮件是否为钓鱼邮件，从【发件人可信度、正文话术、链接安全性、诱导行为】四个维度综合判断。
+请从发件人可信度、正文话术、链接安全性、诱导行为四个维度分析。
+威胁情报提示：VirusTotal检测到{len(vt_malicious)}个恶意链接，恶意引擎命中数{vt_count}。
 
-=== 邮件信息 ===
 发件人：{sender}
 主题：{subject}
-正文内容：
+正文：
 {body}
 
-包含的链接列表：
+链接列表：
 {json.dumps(links, ensure_ascii=False)}
+恶意链接：
+{json.dumps(vt_malicious, ensure_ascii=False)}
 
-=== 输出要求 ===
-必须严格返回标准JSON格式，字段如下：
+返回格式：
 {{
     "is_phish": true/false,
     "risk_level": "高/中/低",
     "confidence": 0.xx,
-    "reason": "用中文详细说明判断理由，不超过100字",
-    "malicious_links": ["识别出的恶意链接列表，没有则为空数组"]
+    "reason": "中文理由，不超过100字",
+    "malicious_links": ["恶意链接列表"]
 }}
-
-要求：
-1. is_phish 为布尔值，true表示是钓鱼邮件
-2. risk_level 只能是 高、中、低 三个值之一
-3. confidence 为0到1之间的浮点数，表示置信度
-4. malicious_links 只放你确认有恶意的链接，不确定就放空
 """
         }
     ]
 
     try:
-        # 调用通义千问兼容OpenAI格式接口
         response = requests.post(
-            "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            config.API_BASE_URL,
             headers={
-                "Authorization": f"Bearer {DASHSCOPE_API_KEY}",
+                "Authorization": f"Bearer {config.DASHSCOPE_API_KEY}",
                 "Content-Type": "application/json"
             },
             json={
-                "model": MODEL_NAME,
+                "model": config.QWEN_MODEL,
                 "messages": messages,
-                "temperature": 0.1,  # 调低温度，输出更稳定
-                "response_format": {"type": "json_object"}  # 强制返回JSON
+                "temperature": 0.1,
+                "response_format": {"type": "json_object"}
             },
-            timeout=REQUEST_TIMEOUT
+            timeout=config.REQUEST_TIMEOUT
         )
         response.raise_for_status()
         result = response.json()
 
-        # 解析模型返回的内容
-        ai_response = result["choices"][0]["message"]["content"]
-        ai_result = json.loads(ai_response)
-
-        # 字段校验与格式化，确保输出稳定
+        ai_result = json.loads(result["choices"][0]["message"]["content"])
         return {
             "is_phish": bool(ai_result.get("is_phish", False)),
             "risk_level": ai_result.get("risk_level", "低"),
             "confidence": float(ai_result.get("confidence", 0.5)),
-            "reason": str(ai_result.get("reason", "大模型分析完成")),
-            "malicious_links": list(ai_result.get("malicious_links", []))
+            "reason": str(ai_result.get("reason", "分析完成")),
+            "malicious_links": list(ai_result.get("malicious_links", [])),
+            "virustotal_hits": vt_count
         }
 
     except Exception as e:
-        # API调用失败，自动降级到规则检测
         rule_result = _rule_based_detect(email_data)
-        rule_result["reason"] = f"[降级模式] {rule_result['reason']}（API调用失败：{str(e)[:30]}）"
+        rule_result["reason"] = f"[降级模式] {rule_result['reason']}（API异常：{str(e)[:30]}）"
         return rule_result
