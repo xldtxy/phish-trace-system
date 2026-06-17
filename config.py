@@ -27,4 +27,8 @@ SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 
 # 初始化上传文件夹
 if not os.path.exists(UPLOAD_FOLDER):
+<<<<<<< HEAD
     os.makedirs(UPLOAD_FOLDER)
+=======
+    os.makedirs(UPLOAD_FOLDER)
+>>>>>>> df6c87fd30868e7a02b0f6f6f37fbe63523effc1
