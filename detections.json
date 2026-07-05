@@ -1,0 +1,221 @@
+[
+  {
+    "id": "192f4d67-88a0-495d-a591-d1cf6c831080",
+    "timestamp": "2026-07-05T17:40:05.808378",
+    "email": {
+      "from": "Robert Elz <kre@munnari.OZ.AU>",
+      "subject": "Re: New Sequences Window",
+      "to": "Chris Garrigues <cwg-dated-1030377287.06fa6d@DeepEddy.Com>",
+      "date": "Thu, 22 Aug 2002 18:26:25 +0700",
+      "text": "    Date:        Wed, 21 Aug 2002 10:54:46 -0500\n    From:        Chris Garrigues <cwg-dated-1030377287.06fa6d@DeepEddy.Com>\n    Message-ID:  <1029945287.4797.TMDA@deepeddy.vircio.com>\n\n\n  | I can't reproduce this error.\n\nFor me it is very repeatable... (like every time, without fail).\n\nThis is the debug log of the pick happening ...\n\n18:19:03 Pick_It {exec pick +inbox -list -lbrace -lbrace -subject ftp -rbrace -rbrace} {4852-4852 -sequence mercury}\n18:19:03 exec pick +inbox -list -lbrace -lbrac"
+    },
+    "detection": {
+      "is_phish": false,
+      "risk_level": "低",
+      "confidence": 0.95,
+      "reason": "发件人未知但无诱导行为，链接安全且无恶意内容。",
+      "malicious_links": [],
+      "virustotal_hits": 0
+    },
+    "trace": {
+      "ips": [
+        {
+          "ip": "66.187.233.211",
+          "country": "United States",
+          "region": "North Carolina",
+          "city": "Raleigh",
+          "isp": "Red Hat, Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "202.28.97.6",
+          "country": "Thailand",
+          "region": "Bangkok",
+          "city": "Ratchathewi",
+          "isp": "Office of Info.Tech. Admin. for Educational Development",
+          "status": "success"
+        }
+      ],
+      "domains": [
+        {
+          "domain": "listman.redhat.com",
+          "registrar": "Nom-iq Ltd. dba COM LAUDE",
+          "created_date": "1994-05-26 04:00:00 UTC",
+          "expires_date": "2027-05-25 04:00:00 UTC",
+          "registrant": "未知",
+          "status": "success"
+        }
+      ]
+    }
+  },
+  {
+    "id": "7d29d101-c1a2-452d-bc64-5a500669be3f",
+    "timestamp": "2026-07-05T17:41:18.495051",
+    "email": {
+      "from": "Martin Adamson <martin@srv0.ems.ed.ac.uk>",
+      "subject": "Re: [zzzzteana] Nothing like mama used to make",
+      "to": "zzzzteana@yahoogroups.com",
+      "date": "Thu, 22 Aug 2002 14:50:31 +0100",
+      "text": "\n> I just had to jump in here as Carbonara is one of my favourites to make and \n> ask \n> what the hell are you supposed to use instead of cream? \n\nIsn't it just basically a mixture of beaten egg and bacon (or pancetta, \nreally)? You mix in the raw egg to the cooked pasta and the heat of the pasta \ncooks the egg. That's my understanding.\n\nMartin\n\n------------------------ Yahoo! Groups Sponsor ---------------------~-->\n4 DVDs Free +s&p Join Now\nhttp://us.click.yahoo.com/pt6YBB/NXiEAA/mG3HAA/7gSolB"
+    },
+    "detection": {
+      "is_phish": true,
+      "risk_level": "中",
+      "confidence": 0.75,
+      "reason": "发件人未知，正文话术不专业且包含诱导行为。",
+      "malicious_links": [],
+      "virustotal_hits": 0
+    },
+    "trace": {
+      "ips": [
+        {
+          "ip": "66.218.66.218",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "129.215.128.53",
+          "country": "United Kingdom",
+          "region": "Scotland",
+          "city": "Livingston",
+          "isp": "University of Edinburgh",
+          "status": "success"
+        },
+        {
+          "ip": "66.218.66.95",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "66.218.66.69",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "129.215.117.0",
+          "country": "United Kingdom",
+          "region": "Scotland",
+          "city": "Edinburgh",
+          "isp": "University of Edinburgh",
+          "status": "success"
+        }
+      ],
+      "domains": [
+        {
+          "domain": "docs.yahoo.com",
+          "registrar": "MarkMonitor Inc.",
+          "created_date": "1995-01-18 05:00:00 UTC",
+          "expires_date": "2027-01-19 05:00:00 UTC",
+          "registrant": "未知",
+          "status": "success"
+        },
+        {
+          "domain": "us.click.yahoo.com",
+          "registrar": "MarkMonitor Inc.",
+          "created_date": "1995-01-18 05:00:00 UTC",
+          "expires_date": "2027-01-19 05:00:00 UTC",
+          "registrant": "未知",
+          "status": "success"
+        }
+      ]
+    }
+  },
+  {
+    "id": "de9a35cb-d248-469b-9846-15c12357eb46",
+    "timestamp": "2026-07-05T17:47:10.176782",
+    "email": {
+      "from": "Stewart Smith <Stewart.Smith@ee.ed.ac.uk>",
+      "subject": "Re: [zzzzteana] Nothing like mama used to make",
+      "to": "zzzzteana@yahoogroups.com",
+      "date": "Thu, 22 Aug 2002 15:01:20 +0100",
+      "text": "Martin Adamson wrote:\n> \n> Isn't it just basically a mixture of beaten egg and bacon (or pancetta, \n> really)? You mix in the raw egg to the cooked pasta and the heat of the pasta \n> cooks the egg. That's my understanding.\n> \n\nYou're probably right, mine's just the same but with the cream added to the \neggs.  I guess I should try it without.  Actually looking on the internet for a \nrecipe I found this one from possibly one of the scariest people I've ever seen, \nand he's a US Congressman:\n<http:"
+    },
+    "detection": {
+      "is_phish": false,
+      "risk_level": "低",
+      "confidence": 0.85,
+      "reason": "发件人未知但无明显钓鱼特征，链接安全且无恶意内容。",
+      "malicious_links": [],
+      "virustotal_hits": 0
+    },
+    "trace": {
+      "ips": [
+        {
+          "ip": "129.215.34.86",
+          "country": "United Kingdom",
+          "region": "Scotland",
+          "city": "Edinburgh",
+          "isp": "University of Edinburgh",
+          "status": "success"
+        },
+        {
+          "ip": "66.218.67.195",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "129.215.80.253",
+          "country": "United Kingdom",
+          "region": "Scotland",
+          "city": "Edinburgh",
+          "isp": "University of Edinburgh",
+          "status": "success"
+        },
+        {
+          "ip": "66.218.66.218",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        },
+        {
+          "ip": "66.218.66.102",
+          "country": "United States",
+          "region": "New York",
+          "city": "New York",
+          "isp": "Oath Holdings Inc.",
+          "status": "success"
+        }
+      ],
+      "domains": [
+        {
+          "domain": "docs.yahoo.com",
+          "registrar": "MarkMonitor Inc.",
+          "created_date": "1995-01-18 05:00:00 UTC",
+          "expires_date": "2027-01-19 05:00:00 UTC",
+          "registrant": "未知",
+          "status": "success"
+        },
+        {
+          "domain": "virtualcities.com",
+          "registrar": "GoDaddy.com, LLC",
+          "created_date": "1995-02-11 05:00:00 UTC",
+          "expires_date": "2029-02-12 05:00:00 UTC",
+          "registrant": "未知",
+          "status": "success"
+        },
+        {
+          "domain": "ee.ed.ac.uk",
+          "registrar": "",
+          "created_date": "",
+          "expires_date": "",
+          "registrant": "未知",
+          "status": "success"
+        }
+      ]
+    }
+  }
+]

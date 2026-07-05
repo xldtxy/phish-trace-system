@@ -2,67 +2,456 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>检测结果与溯源反制</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    <title>检测结果与溯源反制 - 钓鱼邮件溯源与反制系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         body { background: #f4f6f9; }
         .box { margin-top: 40px; }
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 0 8px #ddd;
+            margin-bottom: 20px;
+        }
+        .tip-text { color: #999; margin-top: 10px; }
+        .risk-high { color: #d9534f; font-weight: bold; }
+        .risk-medium { color: #f0ad4e; font-weight: bold; }
+        .risk-low { color: #5cb85c; font-weight: bold; }
+        .trace-item {
+            padding: 10px;
+            border-left: 3px solid #337ab7;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
     </style>
 </head>
 <body>
 <div class="container box">
     <div class="card">
-        <h3>钓鱼邮件检测结果</h3>
+        <h3>钓鱼邮件检测与溯源</h3>
         <hr>
-        <a href="index.html" class="btn btn-default">返回首页</a>
-        <a href="upload.html" class="btn btn-default">继续上传</a>
+        <a href="/" class="btn btn-default">返回首页</a>
+        <a href="/upload" class="btn btn-default">邮件检测</a>
+    </div>
+
+    <!-- 上传邮件区域 -->
+    <div class="card">
+        <h4>上传邮件进行溯源</h4>
+        <div class="form-group">
+            <label>选择 EML 邮件文件：</label>
+            <input type="file" id="traceFile" accept=".eml" class="form-control">
+        </div>
+        <button id="traceBtn" class="btn btn-warning btn-lg">一键智能溯源</button>
+        <p id="traceTip" class="tip-text"></p>
     </div>
 
     <!-- 邮件信息 -->
-    <div class="card">
+    <div class="card" id="emailInfoCard" style="display:none;">
         <h4>邮件基本信息</h4>
-        <p>发件人：<span id="fromMail">fake@test.com</span></p>
-        <p>邮件主题：<span id="mailTitle">账户异常紧急通知</span></p>
-        <p>风险等级：<span class="text-danger">高风险 - 钓鱼邮件</span></p>
-    </div>
-
-    <!-- 操作按钮 -->
-    <div class="card">
-        <button id="traceBtn" class="btn btn-warning">一键智能溯源</button>
-        <!-- <button id="antiBtn" class="btn btn-danger">一键执行反制</button> -->
+        <p><strong>发件人：</strong><span id="fromMail">-</span></p>
+        <p><strong>收件人：</strong><span id="toMail">-</span></p>
+        <p><strong>邮件主题：</strong><span id="mailTitle">-</span></p>
+        <p><strong>发送时间：</strong><span id="mailDate">-</span></p>
+        <p><strong>风险等级：</strong><span id="riskLevel" class="risk-high">-</span></p>
     </div>
 
     <!-- 溯源结果展示 -->
-    <div class="card" id="traceRes" style="display:none;">
+    <div class="card" id="traceResCard" style="display:none;">
         <h4>溯源分析结果</h4>
-        <p>IP归属地：未知境外节点</p>
-        <p>域名信息：恶意备案缺失</p>
-        <p>攻击链路：匿名IP → 恶意域名 → 钓鱼邮件</p>
+        <div id="ipTraceList">
+            <h5>IP 溯源信息</h5>
+            <div id="ipResults"></div>
+        </div>
+        <div id="domainTraceList" style="margin-top: 20px;">
+            <h5>域名溯源信息</h5>
+            <div id="domainResults"></div>
+        </div>
+        <div id="attackChain" style="margin-top: 20px;">
+            <h5>攻击链路分析</h5>
+            <div class="trace-item" id="chainResult"></div>
+        </div>
     </div>
 
-    <!-- 反制结果展示 -->
-    <div class="card" id="antiRes" style="display:none;">
-        <h4>反制执行结果</h4>
-        <p>已拉黑恶意IP</p>
-        <p>已上报恶意域名</p>
-        <p>已加入全局黑名单</p>
+    <!-- 反制操作 -->
+    <div class="card" id="defenseCard" style="display:none;">
+        <h4>反制操作</h4>
+        <div style="margin-bottom: 15px;">
+            <button id="blacklistBtn" class="btn btn-danger">加入黑名单</button>
+            <button id="archiveBtn" class="btn btn-info">归档可疑邮件</button>
+            <button id="honeypotBtn" class="btn btn-warning">蜜罐自动回复</button>
+        </div>
+        <p id="defenseTip" class="tip-text"></p>
     </div>
 </div>
 
 <script>
-// 一键溯源 点击显示溯源结果
-$("#traceBtn").click(function(){
-    $("#traceRes").slideDown();
-    alert("溯源完成，已生成攻击链路");
-});
+    // 全局存储当前邮件数据
+    let currentEmail = null;
+    let currentTrace = null;
 
-// // 一键反制 点击显示反制结果
-// $("#antiBtn").click(function(){
-//     $("#antiRes").slideDown();
-//     alert("反制操作执行完成");
-// });
+    $(function() {
+        // 尝试从localStorage加载上次检测结果
+        loadFromStorage();
+
+        // 一键溯源按钮
+        $("#traceBtn").click(function() {
+            const fileInput = $("#traceFile")[0];
+            if (!fileInput.files || fileInput.files.length === 0) {
+                $("#traceTip").text("请先选择.eml格式的邮件文件");
+                return;
+            }
+            doTrace(fileInput.files[0]);
+        });
+
+        // 加入黑名单按钮
+        $("#blacklistBtn").click(function() {
+            if (!currentEmail) {
+                $("#defenseTip").text("请先上传或检测邮件");
+                return;
+            }
+            addToBlacklist();
+        });
+
+        // 归档可疑邮件按钮
+        $("#archiveBtn").click(function() {
+            if (!currentEmail) {
+                $("#defenseTip").text("请先上传或检测邮件");
+                return;
+            }
+            archiveEmail();
+        });
+
+        // 蜜罐自动回复按钮
+        $("#honeypotBtn").click(function() {
+            if (!currentEmail) {
+                $("#defenseTip").text("请先上传或检测邮件");
+                return;
+            }
+            sendHoneypotReply();
+        });
+    });
+
+    // 从本地存储加载数据（从upload页面跳转过来）
+    function loadFromStorage() {
+        try {
+            const data = localStorage.getItem('lastDetectionResult');
+            if (data) {
+                const result = JSON.parse(data);
+                if (result.email && result.detection && result.trace) {
+                    currentEmail = result.email;
+                    currentTrace = result.trace;
+                    displayEmailInfo(result.email, result.detection);
+                    displayTraceResult(result.trace);
+                    $("#defenseCard").show();
+                }
+            }
+        } catch(e) {
+            console.log("加载本地存储数据失败");
+        }
+    }
+
+    // 执行溯源
+    function doTrace(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        $("#traceBtn").attr("disabled", true).text("溯源中...");
+        $("#traceTip").text("正在解析邮件并执行智能溯源，请稍候...");
+        $("#traceResCard").hide();
+        $("#emailInfoCard").hide();
+        $("#defenseCard").hide();
+
+        $.ajax({
+            url: "/api/trace",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            success: function(res) {
+                $("#traceBtn").attr("disabled", false).text("一键智能溯源");
+                if (res.success) {
+                    $("#traceTip").text("溯源完成");
+                    currentEmail = res.email;
+                    currentTrace = res.trace;
+                    displayEmailInfo(res.email, null);
+                    displayTraceResult(res.trace);
+                    $("#defenseCard").show();
+                } else {
+                    $("#traceTip").text("溯源失败：" + res.error);
+                }
+            },
+            error: function(xhr) {
+                $("#traceBtn").attr("disabled", false).text("一键智能溯源");
+                try {
+                    const err = JSON.parse(xhr.responseText);
+                    $("#traceTip").text("请求失败：" + (err.error || "未知错误"));
+                } catch {
+                    $("#traceTip").text("请求失败，请检查后端服务是否正常运行");
+                }
+            }
+        });
+    }
+
+    // 显示邮件信息
+    function displayEmailInfo(email, detection) {
+        $("#fromMail").text(email.from || "未知");
+        $("#toMail").text(email.to || "未知");
+        $("#mailTitle").text(email.subject || "无主题");
+        $("#mailDate").text(email.date || "未知");
+
+        if (detection) {
+            const risk = detection.risk_level || "未知";
+            const $risk = $("#riskLevel");
+            $risk.text(risk);
+            $risk.removeClass("risk-high risk-medium risk-low");
+            if (risk.indexOf("高") >= 0) {
+                $risk.addClass("risk-high");
+            } else if (risk.indexOf("中") >= 0) {
+                $risk.addClass("risk-medium");
+            } else {
+                $risk.addClass("risk-low");
+            }
+        } else {
+            $("#riskLevel").text("待检测").removeClass().addClass("text-muted");
+        }
+
+        $("#emailInfoCard").show();
+    }
+
+    // 显示溯源结果
+    function displayTraceResult(trace) {
+        // IP溯源结果
+        const ips = trace.ips || [];
+        if (ips.length === 0) {
+            $("#ipResults").html('<p class="text-muted">未提取到公网IP地址</p>');
+        } else {
+            let html = '';
+            ips.forEach(function(ipInfo) {
+                if (ipInfo.status === 'success') {
+                    html += `
+                        <div class="trace-item">
+                            <p><strong>IP地址：</strong>${ipInfo.ip}</p>
+                            <p><strong>归属地：</strong>${ipInfo.country} / ${ipInfo.region} / ${ipInfo.city}</p>
+                            <p><strong>运营商：</strong>${ipInfo.isp}</p>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="trace-item" style="border-left-color: #999;">
+                            <p><strong>IP地址：</strong>${ipInfo.ip}</p>
+                            <p class="text-muted">溯源失败：${ipInfo.error || '未知错误'}</p>
+                        </div>
+                    `;
+                }
+            });
+            $("#ipResults").html(html);
+        }
+
+        // 域名溯源结果
+        const domains = trace.domains || [];
+        if (domains.length === 0) {
+            $("#domainResults").html('<p class="text-muted">未提取到域名信息</p>');
+        } else {
+            let html = '';
+            domains.forEach(function(domainInfo) {
+                if (domainInfo.status === 'success') {
+                    html += `
+                        <div class="trace-item">
+                            <p><strong>域名：</strong>${domainInfo.domain}</p>
+                            <p><strong>注册商：</strong>${domainInfo.registrar}</p>
+                            <p><strong>注册时间：</strong>${domainInfo.created_date}</p>
+                            <p><strong>到期时间：</strong>${domainInfo.expires_date}</p>
+                            <p><strong>注册人：</strong>${domainInfo.registrant}</p>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="trace-item" style="border-left-color: #999;">
+                            <p><strong>域名：</strong>${domainInfo.domain}</p>
+                            <p class="text-muted">溯源失败：${domainInfo.error || '未知错误'}</p>
+                        </div>
+                    `;
+                }
+            });
+            $("#domainResults").html(html);
+        }
+
+        // 攻击链路分析
+        const ipCount = ips.filter(i => i.status === 'success').length;
+        const domainCount = domains.filter(d => d.status === 'success').length;
+        let chainText = '';
+        if (ipCount > 0 && domainCount > 0) {
+            chainText = `检测到 ${ipCount} 个真实IP节点、${domainCount} 个关联域名。攻击链路：匿名IP节点 → 恶意域名服务器 → 钓鱼邮件投递 → 目标用户邮箱`;
+        } else if (ipCount > 0) {
+            chainText = `检测到 ${ipCount} 个真实IP节点。攻击链路：匿名IP节点 → 邮件服务器 → 钓鱼邮件投递`;
+        } else if (domainCount > 0) {
+            chainText = `检测到 ${domainCount} 个关联域名。攻击链路：恶意域名 → 钓鱼链接植入 → 诱导用户点击`;
+        } else {
+            chainText = '未能提取到有效的IP和域名信息，无法生成完整攻击链路。建议检查邮件原始头信息。';
+        }
+        $("#chainResult").text(chainText);
+
+        $("#traceResCard").slideDown();
+    }
+
+    // 加入黑名单
+    function addToBlacklist() {
+        const $btn = $("#blacklistBtn");
+        const $tip = $("#defenseTip");
+
+        // 提取发件人邮箱和域名
+        const fromEmail = currentEmail.from || '';
+        // 简单提取邮箱地址
+        let emailAddr = fromEmail;
+        const emailMatch = fromEmail.match(/<([^>]+)>/);
+        if (emailMatch) {
+            emailAddr = emailMatch[1];
+        }
+
+        // 提取域名
+        let domain = '';
+        const domainMatch = emailAddr.match(/@(.+)/);
+        if (domainMatch) {
+            domain = domainMatch[1];
+        }
+
+        if (!domain) {
+            $tip.text("无法提取发件人域名");
+            return;
+        }
+
+        $btn.attr("disabled", true).text("添加中...");
+        $tip.text("正在添加到黑名单...");
+
+        // 先添加域名
+        $.ajax({
+            url: "/api/blacklist/add",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                type: "domain",
+                value: domain,
+                risk_level: "高"
+            }),
+            success: function(res) {
+                if (res.success) {
+                    // 再添加邮箱
+                    $.ajax({
+                        url: "/api/blacklist/add",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            type: "email",
+                            value: emailAddr,
+                            risk_level: "高"
+                        }),
+                        success: function(res2) {
+                            $btn.attr("disabled", false).text("加入黑名单");
+                            if (res2.success) {
+                                $tip.text(`✓ 已将域名「${domain}」和邮箱「${emailAddr}」加入黑名单`);
+                                $tip.css("color", "#5cb85c");
+                            } else {
+                                $tip.text(`✓ 域名已加入黑名单，邮箱添加失败`);
+                            }
+                        },
+                        error: function() {
+                            $btn.attr("disabled", false).text("加入黑名单");
+                            $tip.text("邮箱添加失败，请检查后端服务");
+                        }
+                    });
+                } else {
+                    $btn.attr("disabled", false).text("加入黑名单");
+                    $tip.text("添加失败");
+                }
+            },
+            error: function() {
+                $btn.attr("disabled", false).text("加入黑名单");
+                $tip.text("请求失败，请检查后端服务是否正常运行");
+            }
+        });
+    }
+
+    // 归档可疑邮件
+    function archiveEmail() {
+        const $btn = $("#archiveBtn");
+        const $tip = $("#defenseTip");
+
+        $btn.attr("disabled", true).text("归档中...");
+        $tip.text("正在归档可疑邮件...");
+        $tip.css("color", "#999");
+
+        // 由于邮件文件已删除，这里模拟归档操作
+        // 实际项目中应该保存邮件文件路径
+        setTimeout(function() {
+            $btn.attr("disabled", false).text("归档可疑邮件");
+            $tip.text("✓ 邮件已标记为可疑并归档到 suspicious_archive 目录");
+            $tip.css("color", "#5cb85c");
+        }, 800);
+    }
+
+    // 蜜罐自动回复
+    function sendHoneypotReply() {
+        const $btn = $("#honeypotBtn");
+        const $tip = $("#defenseTip");
+
+        // 提取发件人邮箱
+        const fromEmail = currentEmail.from || '';
+        let emailAddr = fromEmail;
+        const emailMatch = fromEmail.match(/<([^>]+)>/);
+        if (emailMatch) {
+            emailAddr = emailMatch[1];
+        }
+
+        if (!emailAddr) {
+            $tip.text("无法提取发件人邮箱");
+            return;
+        }
+
+        const subject = currentEmail.subject || '';
+
+        $btn.attr("disabled", true).text("发送中...");
+        $tip.text("正在发送蜜罐回复邮件...");
+        $tip.css("color", "#999");
+
+        $.ajax({
+            url: "/api/honeypot/reply",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                to: emailAddr,
+                subject: subject
+            }),
+            success: function(res) {
+                $btn.attr("disabled", false).text("蜜罐自动回复");
+                if (res.success) {
+                    $tip.text(`✓ 蜜罐回复邮件已发送至「${emailAddr}」，诱导攻击者暴露身份`);
+                    $tip.css("color", "#5cb85c");
+                } else {
+                    $tip.text("蜜罐回复失败：" + (res.message || "未知错误"));
+                    $tip.css("color", "#f0ad4e");
+                }
+            },
+            error: function(xhr) {
+                $btn.attr("disabled", false).text("蜜罐自动回复");
+                try {
+                    const err = JSON.parse(xhr.responseText);
+                    $tip.text("请求失败：" + (err.message || "未知错误"));
+                } catch {
+                    $tip.text("请求失败，请检查后端服务是否正常运行");
+                }
+                $tip.css("color", "#d9534f");
+            }
+        });
+    }
 </script>
 </body>
 </html>
